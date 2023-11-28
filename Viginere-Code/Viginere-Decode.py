@@ -9,7 +9,7 @@ sortedEngFreq = dict(sorted(EngFreq.items(), key=lambda item: item[1]))
 for i in range(keylen):
     testString = (ciphertext[i::keylen])
     best_shift = 0
-    best_score = 999
+    best_score = float("inf")
     for i in range(26):
         tempFreq = EngFreq
         plaintext = ""
@@ -24,5 +24,5 @@ for i in range(keylen):
             best_shift = i
     plaintext = ""
     for each in testString:
-        plaintext += chr((ord(each)+best_shift-A)%26+A)
+        plaintext += c ((ord(each)+best_shift-A)%26+A)
     print(plaintext)
