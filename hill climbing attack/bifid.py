@@ -23,9 +23,21 @@ def fitness(text,EngTet):
         if each in EngTet:
             fitness += (CTTet[each]-EngTet[each])**2/EngTet[each]
     return(fitness)
+def bifidDecrypt(text,square):
+    coords = []
+    for each in text:
+        coord = np.array(np.where(square==each)).tolist()
+        for i in range(0,2):
+            num = ("".join(str(coord[i])).replace("[","")).replace("]","")
+            if num != "":
+                coord[i] = int(num)
+        coords.append(coord)
+        coords = [x for x in coords if x != [[],[]]]
+
 # set the parent key to a Polybius square with an unmixed alphabet
 alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
 parentKey = np.array([['A', 'B', 'C', 'D', 'E'], ['F', 'G', 'H', 'I', 'K'], ['L', 'M', 'N', 'O', 'P'], ['Q', 'R', 'S', 'T', 'U'], ['V', 'W', 'X', 'Y', 'Z']])
+bifidDecrypt(ciphertext,parentKey)
 # set the best fitness to the fitness of the unmodified ciphertext
 bestFitness = fitness(ciphertext,EngTet)
 print(bestFitness)
