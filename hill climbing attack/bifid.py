@@ -24,8 +24,11 @@ def fitness(text,EngTet):
             fitness += (CTTet[each]-EngTet[each])**2/EngTet[each]
     return(fitness)
 def bifidDecrypt(text,square,period):
-    text = [text[i:i+period] for i in range(0, len(text), period)]
-
+    toAdd = len(text)%period
+    toAddStr = text[-toAdd:]
+    text = [text[i:i+period] for i in range(0, len(text)-toAdd, period)]
+    if toAdd>0:
+        text.append(toAddStr)
     plaintext = ""
     for each in text:
         coords = []
@@ -40,17 +43,17 @@ def bifidDecrypt(text,square,period):
         for i in range(len(coords[0])):
             plaintext += square[coords[0][i]][coords[1][i]]
     return plaintext
-margin = 1
-period = 4
+margin = 0.5
+period = 8
 # set the parent key to a Polybius square with an unmixed alphabet
 alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
 parentKey = np.array([['A', 'B', 'C', 'D', 'E'], ['F', 'G', 'H', 'I', 'K'], ['L', 'M', 'N', 'O', 'P'], ['Q', 'R', 'S', 'T', 'U'], ['V', 'W', 'X', 'Y', 'Z']])
 # set the best fitness to the fitness of the unmodified ciphertext
 bestFitness = fitness(ciphertext,EngTet)
 # set the counter to 0
-count = 51
+count = 0
 # while the counter is less than 10,000
-while count < 50:
+while count < 2000:
     # copy the parent key into a child key
     childKey = parentKey
     # randomly choose one of these modifications to the child key:
@@ -81,7 +84,7 @@ while count < 50:
     elif choice == 5:
         childKey = np.flip(childKey,axis=1)
     # decipher the ciphertext with the child key to find a new plaintext
-    trial = bifidDecrypt(ciphertext,childKey)
+    trial = bifidDecrypt(ciphertext,childKey,period)
     # calculate the new fitness of the new plaintext
     trialFitness = fitness(trial,EngTet)
     # if (the new fitness exceeds the best fitness) or
@@ -96,8 +99,12 @@ while count < 50:
         count = 0
     # increment the counter
     count += 1
-    print(count)
+    if count < 10:
+        print(bestFitness)
+    else:
+        print(count)
 # output the parent key
-plaintext = bifidDecrypt("GRQSIISSADCPQQFUKHRQLEBVDWWSCPEY",parentKey,period)
+plaintext = bifidDecrypt(ciphertext,parentKey,period)
 print(plaintext)
 print(parentKey)
+print(bestFitness)
