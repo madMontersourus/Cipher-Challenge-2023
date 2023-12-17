@@ -1,6 +1,7 @@
 import random
 import json
 import numpy as np
+from math import log
 ciphertext = open("ciphertext.txt","r").read()
 ciphertext = ciphertext.replace(" ","")
 EngTet = dict(json.loads(open("English-frequency.json","r").read()))
@@ -21,7 +22,8 @@ def fitness(text,EngTet):
     fitness = 0
     for each in CTTet:
         if each in EngTet:
-            fitness += (CTTet[each]-EngTet[each])**2/EngTet[each]
+            fitness += log(EngTet{each})
+    fitness = abs(fitness)
     return(fitness)
 def bifidDecrypt(text,square,period):
     toAdd = len(text)%period
@@ -51,7 +53,7 @@ parentKey = np.array([['A', 'B', 'C', 'D', 'E'], ['F', 'G', 'H', 'I', 'K'], ['L'
 # set the best fitness to the fitness of the unmodified ciphertext
 bestFitness = fitness(ciphertext,EngTet)
 # set the counter to 0
-count = 0
+count = 100000
 # while the counter is less than 10,000
 while count < 2000:
     # copy the parent key into a child key
@@ -108,3 +110,5 @@ plaintext = bifidDecrypt(ciphertext,parentKey,period)
 print(plaintext)
 print(parentKey)
 print(bestFitness)
+text = "PLEASECONFIRMDATEYOURAGENTISLESARRIVINGNEWYORKWILLARRANGEACCOMMODATIONASREQUIREDLISTREQUIREDBOOKSMISSINGPLEASESENDAGAINSOCANENSURETHEYAREONDISPLAYWILLLEAVEINSTRUCTIONSFORENTRYATHOTELDESKISLESTOENSURENOONEOBSERVESENTRYTOMANORESTATEDATEOFDEPARTUREALSONEEDEDWILLSENDDETAILSFORPAYMENTBYASEPARATETELEGRAMSOPLEASEDONOTREPLYTOTHISONEMUSTEMPHASISENEEDFORCOMPLETECAREANDDISCRETIONCOLLECTIONVERYVALUABLEMANYRAREITEMSSOURCEEASILYIDENTIFIEDIFDISPOSEDOFTOGETHERCANHELPWITHSTORAGEANDSHIPPINGAFTERCOLLECTIONIFNECESSARYBUTWILLNEEDADVANCEDWARNINGDONOTCONTACTMSSTYLESWITHQUERIES"
+print(fitness(text,EngTet))
